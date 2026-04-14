@@ -7,22 +7,77 @@ package br.ulbra.view;
 
 import br.ulbra.dao.UsuarioDAO;
 import br.ulbra.model.Usuario;
+import java.awt.Color;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
 /**
  *
  * @author aluno.saolucas
  */
-public class    FormCadastro extends javax.swing.JFrame {
+public class FormCadastro extends javax.swing.JFrame {
 
     /**
      * Creates new form FormCadastro
      */
-
     public FormCadastro() {
         initComponents();
+        this.setLocationRelativeTo(null);
+
+        javax.swing.event.DocumentListener listener = new javax.swing.event.DocumentListener() {
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                validarSenhas();
+            }
+
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                validarSenhas();
+            }
+
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                validarSenhas();
+            }
+        };
+
+        txtSenha.getDocument().addDocumentListener(listener);
+        txtConfirmarSenha.getDocument().addDocumentListener(listener);
     }
+
+    private void validarSenhas() {
+        String senha = txtSenha.getText();
+        String confirmar = txtConfirmarSenha.getText();
+
+        if (senha.isEmpty() || confirmar.isEmpty()) {
+            txtSenha.setForeground(Color.BLACK);
+            txtConfirmarSenha.setForeground(Color.BLACK);
+        } else if (!senha.equals(confirmar)) {
+            txtSenha.setForeground(Color.RED);
+            txtConfirmarSenha.setForeground(Color.RED);
+        } else {
+            txtSenha.setForeground(Color.BLACK);
+            txtConfirmarSenha.setForeground(Color.BLACK);
+        }
+    }
+
+    public boolean validarCampos() {
+        
+        JTextField[] campos = {txtNome, txtEmail, txtSenha, txtConfirmarSenha};
+
+        for (JTextField campo : campos) {
+            if (campo.getText().trim().isEmpty()) {
+                return false;
+            }
+        }
+        
+        
+        if (!(rbtMasculino.isSelected() || rbtFeminino.isSelected())) {
+                return false;
+            }
+        
+        return true;
+    } 
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -51,8 +106,9 @@ public class    FormCadastro extends javax.swing.JFrame {
         btnLimpar = new javax.swing.JButton();
         txtConfirmarSenha = new javax.swing.JPasswordField();
         txtSenha = new javax.swing.JPasswordField();
+        rbtMostrarSenha = new javax.swing.JRadioButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro");
 
         jPanel1.setBackground(new java.awt.Color(20, 20, 20));
@@ -118,14 +174,39 @@ public class    FormCadastro extends javax.swing.JFrame {
             }
         });
 
+        txtConfirmarSenha.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                txtConfirmarSenhaInputMethodTextChanged(evt);
+            }
+        });
+
+        txtSenha.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                txtSenhaInputMethodTextChanged(evt);
+            }
+        });
+
+        rbtMostrarSenha.setForeground(new java.awt.Color(255, 255, 255));
+        rbtMostrarSenha.setText("Mostrar Senha");
+        rbtMostrarSenha.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                rbtMostrarSenhaStateChanged(evt);
+            }
+        });
+        rbtMostrarSenha.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rbtMostrarSenhaMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(174, 174, 174))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(160, 160, 160)
                 .addComponent(btnSalvar)
@@ -154,6 +235,14 @@ public class    FormCadastro extends javax.swing.JFrame {
                         .addComponent(rbtFeminino, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel6))
                 .addGap(22, 22, 22))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(174, 174, 174))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(178, 178, 178)
+                .addComponent(rbtMostrarSenha)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -193,11 +282,13 @@ public class    FormCadastro extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar)
                     .addComponent(btnLimpar))
-                .addGap(26, 26, 26))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rbtMostrarSenha)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -227,13 +318,20 @@ public class    FormCadastro extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLimparActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        if (!validarCampos()) {
+            JOptionPane.showMessageDialog(null, "Formuláiro com campos não preenchidos");
+            return;
+        }
+        //JOptionPane.showMessageDialog(null, validarCampos());
+   
         Usuario u = new Usuario(); //Criaremos um objeto da classe Usuario
-        
+
         try {
             UsuarioDAO ud = new UsuarioDAO();
             u.setNome(txtNome.getText());
             u.setSenha(txtSenha.getText());
             u.setEmail(txtEmail.getText());
+            u.setFone(txtFone.getText());
 
             //u.setFone(txtFone.getText());
             if (rbtMasculino.isSelected()) {
@@ -249,10 +347,30 @@ public class    FormCadastro extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnSalvarActionPerformed
 
-/**
- * @param args the command line arguments
- */
-public static void main(String args[]) {
+    private void rbtMostrarSenhaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbtMostrarSenhaMouseClicked
+
+    }//GEN-LAST:event_rbtMostrarSenhaMouseClicked
+
+    private void txtConfirmarSenhaInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txtConfirmarSenhaInputMethodTextChanged
+    }//GEN-LAST:event_txtConfirmarSenhaInputMethodTextChanged
+
+    private void txtSenhaInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txtSenhaInputMethodTextChanged
+    }//GEN-LAST:event_txtSenhaInputMethodTextChanged
+
+    private void rbtMostrarSenhaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_rbtMostrarSenhaStateChanged
+        if (rbtMostrarSenha.isSelected()) {
+            txtSenha.setEchoChar((char) 0);
+            txtConfirmarSenha.setEchoChar((char) 0);
+        } else {
+            txtSenha.setEchoChar('*');
+            txtConfirmarSenha.setEchoChar('*');
+        }
+    }//GEN-LAST:event_rbtMostrarSenhaStateChanged
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -263,28 +381,24 @@ public static void main(String args[]) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                
 
-}
+                }
             }
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(FormCadastro.class
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-} catch (InstantiationException ex) {
+        } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(FormCadastro.class
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-} catch (IllegalAccessException ex) {
+        } catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(FormCadastro.class
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(FormCadastro.class
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -311,6 +425,7 @@ public static void main(String args[]) {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton rbtFeminino;
     private javax.swing.JRadioButton rbtMasculino;
+    private javax.swing.JRadioButton rbtMostrarSenha;
     private javax.swing.JPasswordField txtConfirmarSenha;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtFone;

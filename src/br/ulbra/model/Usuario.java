@@ -2,19 +2,29 @@
 package br.ulbra.model;
 
 public class Usuario {
-    private String nome, email, senha, sexo;
+    private String nome, email, senha, sexo, fone;
     private int id;
 
     public Usuario() {
     }
 
-    public Usuario(String nome, String email, String senha, String sexo) {
+    public Usuario(String nome, String email, String senha, String sexo, String fone) {
         this.nome = nome;
         this.email = email;
         this.senha = senha;
         this.sexo = sexo;
+        this.fone = fone;
+        this.id = id;
     }
 
+    public String getFone() {
+        return fone;
+    }
+
+    public void setFone(String fone) {
+        this.fone = fone;
+    }
+    
     public String getNome() {
         return nome;
     }

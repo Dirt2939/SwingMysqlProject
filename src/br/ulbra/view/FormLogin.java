@@ -5,6 +5,12 @@
  */
 package br.ulbra.view;
 
+import br.ulbra.dao.UsuarioDAO;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author aluno.saolucas
@@ -137,7 +143,19 @@ public class FormLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSenhaActionPerformed
 
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
-        // TODO add your handling code here:
+        UsuarioDAO dao = null;
+        try {
+            dao = new UsuarioDAO();
+            if (dao.checkLogin(txtEmail.getText(), txtSenha.getText())) {
+                new FormDashboard().setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Login ou Senha incorreta!");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FormLogin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_btnEntrarActionPerformed
 
     private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
