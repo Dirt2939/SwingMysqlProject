@@ -5,80 +5,35 @@
  */
 package br.ulbra.view;
 
-import br.ulbra.dao.UsuarioDAO;
 import br.ulbra.model.Usuario;
-import java.awt.Color;
-import java.sql.SQLException;
-import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 
 /**
  *
  * @author aluno.saolucas
  */
-public class FormCadastro extends javax.swing.JFrame {
+public class FormEditar extends javax.swing.JFrame {
 
-    /**
-     * Creates new form FormCadastro
-     */
-    public FormCadastro() {
+    Usuario u;
+    
+    public FormEditar(Usuario u) {
         initComponents();
         this.setLocationRelativeTo(null);
-
-        javax.swing.event.DocumentListener listener = new javax.swing.event.DocumentListener() {
-            public void insertUpdate(javax.swing.event.DocumentEvent e) {
-                validarSenhas();
-            }
-
-            public void removeUpdate(javax.swing.event.DocumentEvent e) {
-                validarSenhas();
-            }
-
-            public void changedUpdate(javax.swing.event.DocumentEvent e) {
-                validarSenhas();
-            }
-        };
-
-        txtSenha.getDocument().addDocumentListener(listener);
-        txtConfirmarSenha.getDocument().addDocumentListener(listener);
-    }
-
-    private void validarSenhas() {
-        String senha = txtSenha.getText();
-        String confirmar = txtConfirmarSenha.getText();
-
-        if (senha.isEmpty() || confirmar.isEmpty()) {
-            txtSenha.setForeground(Color.BLACK);
-            txtConfirmarSenha.setForeground(Color.BLACK);
-        } else if (!senha.equals(confirmar)) {
-            txtSenha.setForeground(Color.RED);
-            txtConfirmarSenha.setForeground(Color.RED);
+        this.u = u;
+        
+        txtNome.setText(u.getNome());
+        txtEmail.setText(u.getEmail());
+        txtFone.setText(u.getFone());
+        if (u.getSexo().equalsIgnoreCase("masculino")) {
+            rbtMasculino.setSelected(true);
         } else {
-            txtSenha.setForeground(Color.BLACK);
-            txtConfirmarSenha.setForeground(Color.BLACK);
+            rbtFeminino.setSelected(true);
         }
     }
 
-    public boolean validarCampos() {
-        
-        JTextField[] campos = {txtNome, txtEmail, txtSenha, txtConfirmarSenha};
-
-        for (JTextField campo : campos) {
-            if (campo.getText().trim().isEmpty()) {
-                return false;
-            }
-        }
-        
-        
-        if (!(rbtMasculino.isSelected() || rbtFeminino.isSelected())) {
-                return false;
-            }
-        
-        return true;
-    } 
-
+    private FormEditar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -88,15 +43,13 @@ public class FormCadastro extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        bgSexo = new javax.swing.ButtonGroup();
+        gpSexo = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         rbtMasculino = new javax.swing.JRadioButton();
         rbtFeminino = new javax.swing.JRadioButton();
         jLabel6 = new javax.swing.JLabel();
@@ -104,14 +57,10 @@ public class FormCadastro extends javax.swing.JFrame {
         txtFone = new javax.swing.JTextField();
         btnSalvar = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
-        txtConfirmarSenha = new javax.swing.JPasswordField();
-        txtSenha = new javax.swing.JPasswordField();
-        rbtMostrarSenha = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Cadastro");
 
-        jPanel1.setBackground(new java.awt.Color(20, 20, 20));
+        jPanel1.setBackground(new java.awt.Color(10, 10, 10));
 
         jLabel1.setFont(new java.awt.Font("Dialog", 3, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -120,17 +69,17 @@ public class FormCadastro extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("NOME");
 
+        txtNome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNomeActionPerformed(evt);
+            }
+        });
+
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("E-MAIL");
 
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("SENHA");
-
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("CONFIRMAR SENHA");
-
         rbtMasculino.setBackground(new java.awt.Color(69, 73, 74));
-        bgSexo.add(rbtMasculino);
+        gpSexo.add(rbtMasculino);
         rbtMasculino.setForeground(new java.awt.Color(255, 255, 255));
         rbtMasculino.setText("Masculino");
         rbtMasculino.setToolTipText("");
@@ -141,7 +90,7 @@ public class FormCadastro extends javax.swing.JFrame {
         });
 
         rbtFeminino.setBackground(new java.awt.Color(69, 73, 74));
-        bgSexo.add(rbtFeminino);
+        gpSexo.add(rbtFeminino);
         rbtFeminino.setForeground(new java.awt.Color(255, 255, 255));
         rbtFeminino.setText("Feminino");
         rbtFeminino.addActionListener(new java.awt.event.ActionListener() {
@@ -156,7 +105,7 @@ public class FormCadastro extends javax.swing.JFrame {
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("FONE");
 
-        btnSalvar.setBackground(new java.awt.Color(20, 20, 20));
+        btnSalvar.setBackground(new java.awt.Color(10, 10, 10));
         btnSalvar.setForeground(new java.awt.Color(255, 255, 255));
         btnSalvar.setText("SALVAR");
         btnSalvar.addActionListener(new java.awt.event.ActionListener() {
@@ -165,7 +114,7 @@ public class FormCadastro extends javax.swing.JFrame {
             }
         });
 
-        btnLimpar.setBackground(new java.awt.Color(20, 20, 20));
+        btnLimpar.setBackground(new java.awt.Color(10, 10, 10));
         btnLimpar.setForeground(new java.awt.Color(255, 255, 255));
         btnLimpar.setText("LIMPAR");
         btnLimpar.addActionListener(new java.awt.event.ActionListener() {
@@ -174,61 +123,21 @@ public class FormCadastro extends javax.swing.JFrame {
             }
         });
 
-        txtConfirmarSenha.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                txtConfirmarSenhaInputMethodTextChanged(evt);
-            }
-        });
-
-        txtSenha.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                txtSenhaInputMethodTextChanged(evt);
-            }
-        });
-
-        rbtMostrarSenha.setForeground(new java.awt.Color(255, 255, 255));
-        rbtMostrarSenha.setText("Mostrar Senha");
-        rbtMostrarSenha.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                rbtMostrarSenhaStateChanged(evt);
-            }
-        });
-        rbtMostrarSenha.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rbtMostrarSenhaMouseClicked(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(160, 160, 160)
-                .addComponent(btnSalvar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnLimpar)
-                .addGap(0, 172, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel4)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
-                    .addComponent(txtEmail)
-                    .addComponent(txtSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                    .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
                     .addComponent(txtNome))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
                     .addComponent(jLabel7)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(txtFone, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(txtConfirmarSenha, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE))
+                    .addComponent(txtFone, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(rbtMasculino)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -236,12 +145,14 @@ public class FormCadastro extends javax.swing.JFrame {
                     .addComponent(jLabel6))
                 .addGap(22, 22, 22))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(170, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(174, 174, 174))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(178, 178, 178)
-                .addComponent(rbtMostrarSenha)
+                .addGap(158, 158, 158)
+                .addComponent(btnSalvar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnLimpar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -273,22 +184,10 @@ public class FormCadastro extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel7)))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtConfirmarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar)
                     .addComponent(btnLimpar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rbtMostrarSenha)
-                .addContainerGap())
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -313,65 +212,21 @@ public class FormCadastro extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_rbtFemininoActionPerformed
 
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
         txtNome.setText(null);
         txtEmail.setText(null);
         txtFone.setText(null);
-        txtSenha.setText(null);
-        txtConfirmarSenha.setText(null);
-        
-        bgSexo.clearSelection();
+
+        gpSexo.clearSelection();
     }//GEN-LAST:event_btnLimparActionPerformed
 
-    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        if (!validarCampos()) {
-            JOptionPane.showMessageDialog(null, "Formuláiro com campos não preenchidos");
-            return;
-        }
-        //JOptionPane.showMessageDialog(null, validarCampos());
-   
-        Usuario u = new Usuario(); //Criaremos um objeto da classe Usuario
-
-        try {
-            UsuarioDAO ud = new UsuarioDAO();
-            u.setNome(txtNome.getText());
-            u.setSenha(txtSenha.getText());
-            u.setEmail(txtEmail.getText());
-            u.setFone(txtFone.getText());
-
-            //u.setFone(txtFone.getText());
-            if (rbtMasculino.isSelected()) {
-                u.setSexo("Masculino");
-            } else {
-                u.setSexo("Feminino");
-            }
-            ud.create(u);
-            JOptionPane.showMessageDialog(null, "Usuário Salvo com sucesso!");
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro:" + ex.getMessage());
-        }
-
-    }//GEN-LAST:event_btnSalvarActionPerformed
-
-    private void rbtMostrarSenhaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rbtMostrarSenhaMouseClicked
-
-    }//GEN-LAST:event_rbtMostrarSenhaMouseClicked
-
-    private void txtConfirmarSenhaInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txtConfirmarSenhaInputMethodTextChanged
-    }//GEN-LAST:event_txtConfirmarSenhaInputMethodTextChanged
-
-    private void txtSenhaInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txtSenhaInputMethodTextChanged
-    }//GEN-LAST:event_txtSenhaInputMethodTextChanged
-
-    private void rbtMostrarSenhaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_rbtMostrarSenhaStateChanged
-        if (rbtMostrarSenha.isSelected()) {
-            txtSenha.setEchoChar((char) 0);
-            txtConfirmarSenha.setEchoChar((char) 0);
-        } else {
-            txtSenha.setEchoChar('*');
-            txtConfirmarSenha.setEchoChar('*');
-        }
-    }//GEN-LAST:event_rbtMostrarSenhaStateChanged
+    private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNomeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -387,55 +242,41 @@ public class FormCadastro extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FormCadastro.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
+            java.util.logging.Logger.getLogger(FormEditar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FormCadastro.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
+            java.util.logging.Logger.getLogger(FormEditar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FormCadastro.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
+            java.util.logging.Logger.getLogger(FormEditar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FormCadastro.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormEditar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FormCadastro().setVisible(true);
+                new FormEditar().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup bgSexo;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnSalvar;
+    private javax.swing.ButtonGroup gpSexo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton rbtFeminino;
     private javax.swing.JRadioButton rbtMasculino;
-    private javax.swing.JRadioButton rbtMostrarSenha;
-    private javax.swing.JPasswordField txtConfirmarSenha;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtFone;
     private javax.swing.JTextField txtNome;
-    private javax.swing.JPasswordField txtSenha;
     // End of variables declaration//GEN-END:variables
 }

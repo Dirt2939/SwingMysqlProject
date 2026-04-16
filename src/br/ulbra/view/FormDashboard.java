@@ -8,6 +8,8 @@ package br.ulbra.view;
 import br.ulbra.dao.UsuarioDAO;
 import br.ulbra.model.Usuario;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -150,7 +152,12 @@ public class FormDashboard extends javax.swing.JFrame {
 
         jMenu6.setText("Sobre");
 
-        jMenuItem5.setText("SIstema");
+        jMenuItem5.setText("Sistema");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
         jMenu6.add(jMenuItem5);
 
         jMenuBar2.add(jMenu6);
@@ -189,35 +196,40 @@ public class FormDashboard extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Usuário removido!");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro:" + ex.getMessage());
+        } catch (RuntimeException re) {
+            JOptionPane.showMessageDialog(null, re.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_itmRemUsuarioActionPerformed
 
     private void itmCadUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmCadUsuarioActionPerformed
-        new FormCadastro().setVisible(true); 
+        new FormCadastro().setVisible(true);
         setLocationRelativeTo(null);
     }//GEN-LAST:event_itmCadUsuarioActionPerformed
 
     private void itmPredefinidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmPredefinidosActionPerformed
         try {
             UsuarioDAO ud = new UsuarioDAO();
-            ud.create(new Usuario("Bento", "bento@outlook.com", "senha1", "Masculino", "51988223344"));
-            ud.create(new Usuario("Anita", "anita@gmail.com", "senha2", "Feminino", "51977112233"));
-            ud.create(new Usuario("Gumersindo", "gume@bol.com.br", "senha3", "Masculino", "51966009988"));
-            ud.create(new Usuario("Prenda", "prenda@terra.com.br", "senha4", "Feminino", "51955887766"));
-            ud.create(new Usuario("Bagual", "bagual@uol.com.br", "senha5", "Masculino", "51944776655"));
-            ud.create(new Usuario("Mariana", "mari@gmail.com", "senha6", "Feminino", "51933665544"));
-            ud.create(new Usuario("Tchê", "tche@yahoo.com", "senha7", "Masculino", "51922554433"));
-            ud.create(new Usuario("Bibiana", "bibi@ig.com.br", "senha8", "Feminino", "51911443322"));
-            ud.create(new Usuario("Loco", "loco@gmail.com", "senha9", "Masculino", "51999332211"));
-            ud.create(new Usuario("Guria", "guria@hotmail.com", "senha10", "Feminino", "51988221100"));
-            ud.create(new Usuario("Indio", "indio@gmail.com", "senha11", "Masculino", "51977110099"));
-            ud.create(new Usuario(" prenda_minha", "minha@gmail.com", "senha12", "Feminino", "51966008877"));
-            ud.create(new Usuario("Fandango", "fanda@outlook.com", "senha13", "Masculino", "51955997766"));
-            ud.create(new Usuario("Rosita", "rosita@gmail.com", "senha14", "Feminino", "51944886655"));
-            ud.create(new Usuario("Campeiro", "campo@terra.com.br", "senha15", "Masculino", "51933775544"));
-            ud.create(new Usuario("Luzia", "luzia@uol.com.br", "senha16", "Feminino", "51922664433"));
-            ud.create(new Usuario("Pala", "pala@yahoo.com", "senha17", "Masculino", "51911553322"));
-            ud.create(new Usuario("Teiniaguá", "teinia@gmail.com", "senha18", "Feminino", "51900442211"));
+            ud.create(
+                    new Usuario("Bento", "bento@outlook.com", "senha1", "Masculino", "51988223344"),
+                    new Usuario("Anita", "anita@gmail.com", "senha2", "Feminino", "51977112233"),
+                    new Usuario("Gumersindo", "gume@bol.com.br", "senha3", "Masculino", "51966009988"),
+                    new Usuario("Prenda", "prenda@terra.com.br", "senha4", "Feminino", "51955887766"),
+                    new Usuario("Bagual", "bagual@uol.com.br", "senha5", "Masculino", "51944776655"),
+                    new Usuario("Mariana", "mari@gmail.com", "senha6", "Feminino", "51933665544"),
+                    new Usuario("Tchê", "tche@yahoo.com", "senha7", "Masculino", "51922554433"),
+                    new Usuario("Bibiana", "bibi@ig.com.br", "senha8", "Feminino", "51911443322"),
+                    new Usuario("Loco", "loco@gmail.com", "senha9", "Masculino", "51999332211"),
+                    new Usuario("Guria", "guria@hotmail.com", "senha10", "Feminino", "51988221100"),
+                    new Usuario("Indio", "indio@gmail.com", "senha11", "Masculino", "51977110099"),
+                    new Usuario(" prenda_minha", "minha@gmail.com", "senha12", "Feminino", "51966008877"),
+                    new Usuario("Fandango", "fanda@outlook.com", "senha13", "Masculino", "51955997766"),
+                    new Usuario("Rosita", "rosita@gmail.com", "senha14", "Feminino", "51944886655"),
+                    new Usuario("Campeiro", "campo@terra.com.br", "senha15", "Masculino", "51933775544"),
+                    new Usuario("Luzia", "luzia@uol.com.br", "senha16", "Feminino", "51922664433"),
+                    new Usuario("Pala", "pala@yahoo.com", "senha17", "Masculino", "51911553322"),
+                    new Usuario("Teiniaguá", "teinia@gmail.com", "senha18", "Feminino", "51900442211")
+            );
+            
             JOptionPane.showMessageDialog(null, "Banco alimentado!");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro:" + ex.getMessage());
@@ -229,12 +241,12 @@ public class FormDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_itmSairActionPerformed
 
     private void itmConsUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmConsUsuarioActionPerformed
-        try {
-            new FormListagem().setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(FormDashboard.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        new FormListagem().setVisible(true);
     }//GEN-LAST:event_itmConsUsuarioActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        JOptionPane.showMessageDialog(null, "Sistema crud básico.");
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -8,8 +8,10 @@ package br.ulbra.view;
 import br.ulbra.dao.UsuarioDAO;
 import br.ulbra.model.Usuario;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -21,10 +23,11 @@ public class FormListagem extends javax.swing.JFrame {
     /**
      * Creates new form FormListagem
      */
-    public FormListagem() throws SQLException {
+    public FormListagem() {
         initComponents();
         this.setLocationRelativeTo(null);
-        readJTable();
+        
+        itemEditar.setText("Editar");
     }
 
     /**
@@ -36,10 +39,23 @@ public class FormListagem extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        popEditar = new javax.swing.JPopupMenu();
+        itemEditar = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbUsuario = new javax.swing.JTable();
         btnFechar = new javax.swing.JButton();
+        btnProcurar = new javax.swing.JButton();
+        txtBusca = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+
+        itemEditar.setText("jMenuItem1");
+        itemEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemEditarActionPerformed(evt);
+            }
+        });
+        popEditar.add(itemEditar);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -68,6 +84,11 @@ public class FormListagem extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tbUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                tbUsuarioMouseReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbUsuario);
         if (tbUsuario.getColumnModel().getColumnCount() > 0) {
             tbUsuario.getColumnModel().getColumn(0).setResizable(false);
@@ -89,23 +110,51 @@ public class FormListagem extends javax.swing.JFrame {
             }
         });
 
+        btnProcurar.setBackground(new java.awt.Color(10, 10, 10));
+        btnProcurar.setForeground(new java.awt.Color(255, 255, 255));
+        btnProcurar.setText("Procurar");
+        btnProcurar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProcurarActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Busca");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 571, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(303, 303, 303)
                 .addComponent(btnFechar)
-                .addGap(250, 250, 250))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnProcurar)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 688, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(btnFechar)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnFechar)
+                    .addComponent(btnProcurar))
+                .addGap(37, 37, 37))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -127,22 +176,51 @@ public class FormListagem extends javax.swing.JFrame {
         modelo.setNumRows(0);
         UsuarioDAO udao = new UsuarioDAO();
 
-        for (Usuario p : udao.read()) {
-            modelo.addRow(new Object[]{
-                p.getId(),
-                p.getNome(),
-                p.getEmail(),
-                p.getSenha(),
-                p.getSexo(),
-                p.getFone()
-            });
+        String busca = txtBusca.getText();
+        ArrayList<Usuario> usuarios = busca.isEmpty() ? udao.read() : udao.read(busca);
+
+        for (Usuario u : usuarios) {
+            modelo.addRow(new Object[]{u.getId(), u.getNome(),
+                u.getEmail(), u.getSenha(), u.getSexo(), u.getFone()});
         }
     }
 
-    
+
     private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnFecharActionPerformed
+
+    private void btnProcurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcurarActionPerformed
+        try {
+            readJTable();
+        } catch (SQLException ex) {
+            Logger.getLogger(FormListagem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnProcurarActionPerformed
+
+    private void tbUsuarioMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbUsuarioMouseReleased
+        if (evt.isPopupTrigger() || SwingUtilities.isRightMouseButton(evt)) {
+            // Seleciona a linha onde o mouse clicou
+            int linha = tbUsuario.rowAtPoint(evt.getPoint());
+            tbUsuario.setRowSelectionInterval(linha, linha);
+
+            // Mostra o menu que você criou no Inspector
+            popEditar.show(tbUsuario, evt.getX(), evt.getY());
+        }
+    }//GEN-LAST:event_tbUsuarioMouseReleased
+
+    private void itemEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemEditarActionPerformed
+        int index = tbUsuario.getSelectedRow();
+        Usuario u = new Usuario();
+        
+        u.setId(Integer.parseInt(tbUsuario.getValueAt(index, 0).toString()));
+        u.setNome(tbUsuario.getValueAt(index, 1).toString());
+        u.setEmail(tbUsuario.getValueAt(index, 2).toString());
+        u.setFone(tbUsuario.getValueAt(index, 5).toString());
+        u.setSexo(tbUsuario.getValueAt(index, 4).toString());
+        
+        new FormEditar(u).setVisible(true);
+    }//GEN-LAST:event_itemEditarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -174,19 +252,20 @@ public class FormListagem extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                try {
-                    new FormListagem().setVisible(true);
-                } catch (SQLException ex) {
-                    Logger.getLogger(FormListagem.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                new FormListagem().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFechar;
+    private javax.swing.JButton btnProcurar;
+    private javax.swing.JMenuItem itemEditar;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPopupMenu popEditar;
     private javax.swing.JTable tbUsuario;
+    private javax.swing.JTextField txtBusca;
     // End of variables declaration//GEN-END:variables
 }
