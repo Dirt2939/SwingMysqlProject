@@ -241,11 +241,15 @@ public class FormDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_itmSairActionPerformed
 
     private void itmConsUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmConsUsuarioActionPerformed
-        new FormListagem().setVisible(true);
+        try {
+            new FormListagem().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(FormDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_itmConsUsuarioActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        JOptionPane.showMessageDialog(null, "Sistema crud básico.");
+        JOptionPane.showMessageDialog(null, "Sistema crud.");
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     /**

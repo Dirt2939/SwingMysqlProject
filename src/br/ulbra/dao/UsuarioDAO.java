@@ -149,6 +149,24 @@ public class UsuarioDAO {
         }
     }
 
+    public void updateUser(Usuario u) {
+        PreparedStatement stmt = null;
+        try {
+            stmt = con.prepareStatement("UPDATE tbusuario SET nome = ?, email = ?, sexo = ?, fone = ? WHERE id = ?");
+            stmt.setString(1, u.getNome());
+            stmt.setString(2, u.getEmail());
+            stmt.setString(3, u.getSexo());
+            stmt.setString(4, u.getFone());
+            stmt.setInt(5, u.getId());
+            
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        } finally {
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+
     public void create(Usuario... us) {
         PreparedStatement stmt = null;
         try {

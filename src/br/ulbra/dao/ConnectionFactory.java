@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 
 public class ConnectionFactory {
     private static final String DRIVER = "com.mysql.jdbc.Driver"; //Driver JDBC
-    private static final String URL = "jdbc:mysql://localhost:3306/bdpoo";// Url do banco de dados
+    private static final String URL = "jdbc:mysql://localhost:3306/bdpoo";// Url do banco de dados 
     private static final String USER = "root"; //Login e senha do banco de dados
     private static final String PASS = "";
 

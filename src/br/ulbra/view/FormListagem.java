@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -23,11 +25,44 @@ public class FormListagem extends javax.swing.JFrame {
     /**
      * Creates new form FormListagem
      */
-    public FormListagem() {
+    public FormListagem() throws SQLException {
         initComponents();
         this.setLocationRelativeTo(null);
-        
+
         itemEditar.setText("Editar");
+        verificar();
+        txtBusca.getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+                try {
+                    verificar();
+                } catch (SQLException ex) {
+                    Logger.getLogger(FormListagem.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                try {
+                    verificar();
+                } catch (SQLException ex) {
+                    Logger.getLogger(FormListagem.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                try {
+                    verificar();
+                } catch (SQLException ex) {
+                    Logger.getLogger(FormListagem.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        });
+    }
+
+    public void verificar() throws SQLException {
+        if (txtBusca.getText().trim().isEmpty()) {
+            readJTable();
+        }
     }
 
     /**
@@ -101,8 +136,8 @@ public class FormListagem extends javax.swing.JFrame {
             tbUsuario.getColumnModel().getColumn(5).setResizable(false);
         }
 
-        btnFechar.setBackground(new java.awt.Color(10, 10, 10));
-        btnFechar.setForeground(new java.awt.Color(255, 255, 255));
+        btnFechar.setBackground(new java.awt.Color(255, 255, 255));
+        btnFechar.setForeground(new java.awt.Color(0, 0, 0));
         btnFechar.setText("Fechar");
         btnFechar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -110,8 +145,8 @@ public class FormListagem extends javax.swing.JFrame {
             }
         });
 
-        btnProcurar.setBackground(new java.awt.Color(10, 10, 10));
-        btnProcurar.setForeground(new java.awt.Color(255, 255, 255));
+        btnProcurar.setBackground(new java.awt.Color(255, 255, 255));
+        btnProcurar.setForeground(new java.awt.Color(0, 0, 0));
         btnProcurar.setText("Procurar");
         btnProcurar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -121,7 +156,7 @@ public class FormListagem extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Busca");
+        jLabel2.setText("Buscar");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -133,23 +168,23 @@ public class FormListagem extends javax.swing.JFrame {
                 .addComponent(btnFechar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnProcurar)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 312, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 688, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addGap(31, 31, 31)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(txtBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 608, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(13, 13, 13)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
+                .addGap(19, 19, 19)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnFechar)
@@ -212,14 +247,14 @@ public class FormListagem extends javax.swing.JFrame {
     private void itemEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemEditarActionPerformed
         int index = tbUsuario.getSelectedRow();
         Usuario u = new Usuario();
-        
+
         u.setId(Integer.parseInt(tbUsuario.getValueAt(index, 0).toString()));
         u.setNome(tbUsuario.getValueAt(index, 1).toString());
         u.setEmail(tbUsuario.getValueAt(index, 2).toString());
         u.setFone(tbUsuario.getValueAt(index, 5).toString());
         u.setSexo(tbUsuario.getValueAt(index, 4).toString());
-        
-        new FormEditar(u).setVisible(true);
+
+        new FormEditar(u, this).setVisible(true);
     }//GEN-LAST:event_itemEditarActionPerformed
 
     /**
@@ -252,7 +287,11 @@ public class FormListagem extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FormListagem().setVisible(true);
+                try {
+                    new FormListagem().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(FormListagem.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
